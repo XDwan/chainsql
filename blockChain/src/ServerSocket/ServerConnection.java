@@ -11,7 +11,6 @@ public class ServerConnection extends Thread {
 
     public ServerConnection(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-        serverSocket.setSoTimeout(10000);
     }
 
     @Override
