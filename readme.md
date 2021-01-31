@@ -1,6 +1,6 @@
 # 基于chainsql的考勤记录系统
 
-toc
+[toc]
 
 MySQL
 =====
