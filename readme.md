@@ -1,4 +1,4 @@
-# 这个是基于chainsql的考勤记录系统
+# 基于chainsql的考勤记录系统
 
 toc
 
