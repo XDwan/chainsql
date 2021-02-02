@@ -1,4 +1,4 @@
-package Message;
+package messageCollection;
 
 public interface MessageType {
     int nullMessage = 0; // 0 代表message为空

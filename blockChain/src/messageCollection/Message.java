@@ -1,4 +1,4 @@
-package Message;
+package messageCollection;
 
 import net.sf.json.JSONObject;
 

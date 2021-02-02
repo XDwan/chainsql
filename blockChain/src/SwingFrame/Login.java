@@ -1,8 +1,8 @@
 package SwingFrame;
 
 import ClientSocket.ClientConnection;
-import Message.Message;
-import Message.MessageType;
+import messageCollection.Message;
+import messageCollection.MessageType;
 import net.sf.json.JSONObject;
 
 import javax.swing.*;
@@ -83,6 +83,20 @@ public class Login extends JFrame {
                 connection.set();
                 connection.connect();
                 Message reMessage = connection.send(new Message(object));
+                switch (reMessage.getMessageType()){
+                    case MessageType.nullMessage:
+                        new Warning("","");
+                        break;
+                    case MessageType.Stu_Login_Return:
+                        if (reMessage.getObject().getBoolean("success")){
+                            OptFrame opt = new OptFrame(reMessage);
+                            Thread thread = new Thread(opt);
+                            thread.run();
+                        }else{
+                            new Warning("请检查账号密码","登陆失败");
+                        }
+
+                }
 
             }
         });

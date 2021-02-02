@@ -1,11 +1,10 @@
 package ClientSocket;
 
-import Message.Message;
+import messageCollection.Message;
 import SwingFrame.Warning;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class ClientConnection {
     Socket client ;
