@@ -1,6 +1,7 @@
 package Message;
 
 public interface MessageType {
+    int nullMessage = 0; // 0 代表message为空
     //登陆事件 1~10
     int Stu_Login = 1; // 学生登陆
     int Stu_Login_Return = 2; //学生登陆信息返回
