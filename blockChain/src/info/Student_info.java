@@ -11,6 +11,7 @@ import java.util.List;
 public class Student_info implements InfoLength_stu {
     String id;
     String name;
+    String password;
     String classId;
     List<Course_info> course;
 
@@ -21,7 +22,12 @@ public class Student_info implements InfoLength_stu {
         classId="";
     }
 
-
+    public Student_info(JSONObject info){
+        id = info.getString("id");
+        name = info.getString("name");
+        classId = info.getString("classId");
+        password = info.getString("password");
+    }
 
     public void setId(String id) throws NameOutOfRangeException {
         if (id.length() > InfoLength_stu.length_id) {
@@ -44,16 +50,15 @@ public class Student_info implements InfoLength_stu {
         this.classId = classId;
     }
 
-    public JSONObject getStuInfo(){
-        JSONObject object = new JSONObject();
+    public JSONObject getStuInfo(JSONObject object){
         object.put("id",id);
-        object.put("Name",name);
+        object.put("name",name);
         object.put("classId",classId);
         return object;
     }
 
     public void print(){
-        System.out.println(getStuInfo());
+        System.out.println(getStuInfo(new JSONObject()));
     }
 
     public static void main(String[] args) {

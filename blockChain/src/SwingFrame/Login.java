@@ -11,9 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Login extends JFrame {
-    String account = "";
-    String password = "";
-    String loginType = "";
+    String account ;
+    String password ;
+    String loginType ;
     JSONObject object = new JSONObject();
 
     public Login() {
@@ -52,19 +52,13 @@ public class Login extends JFrame {
         radioButton_teacher.setFont(new Font("", 0, 22));
         buttonGroup.setSelected(radioButton_student.getModel(), true);
         loginType = "student";
-        radioButton_student.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loginType = "student";
-                System.out.println(loginType);
-            }
+        radioButton_student.addActionListener(e -> {
+            loginType = "student";
+            System.out.println(loginType);
         });
-        radioButton_teacher.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loginType = "teacher";
-                System.out.println(loginType);
-            }
+        radioButton_teacher.addActionListener(e -> {
+            loginType = "teacher";
+            System.out.println(loginType);
         });
         JButton button_login = new JButton("登陆");
         button_login.setFont(new Font("", 0, 22));
@@ -88,7 +82,7 @@ public class Login extends JFrame {
                         new Warning("","");
                         break;
                     case MessageType.Stu_Login_Return:
-                        if (reMessage.getObject().getBoolean("success")){
+                        if (reMessage.getInfo().getBoolean("success")){
                             OptFrame opt = new OptFrame(reMessage);
                             Thread thread = new Thread(opt);
                             thread.run();
