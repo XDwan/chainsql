@@ -1,8 +1,8 @@
 package ServerSocket;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import messageCollection.Message;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,13 +19,14 @@ public class ServerConnection extends Thread {
             try {
                 System.out.println("建立连接");
                 Socket server = serverSocket.accept();
-                DataInputStream in = new DataInputStream(server.getInputStream());
-                DataOutputStream out = new DataOutputStream(server.getOutputStream());
-                System.out.println(in.readUTF());
+                ObjectInputStream in = new ObjectInputStream(server.getInputStream());
+                ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
+                Message message = (Message) in.readObject();
+
                 out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress()
                         + "\nGoodbye!"
                 );
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }

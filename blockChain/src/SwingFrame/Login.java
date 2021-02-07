@@ -84,8 +84,16 @@ public class Login extends JFrame {
                     case MessageType.Stu_Login_Return:
                         if (reMessage.getInfo().getBoolean("success")){
                             OptFrame opt = new OptFrame(reMessage);
-                            Thread thread = new Thread(opt);
-                            thread.run();
+                            while(true){
+                                Thread thread = new Thread(opt);
+                                thread.run();
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException interruptedException) {
+                                    interruptedException.printStackTrace();
+                                }
+                            }
+
                         }else{
                             new Warning("请检查账号密码","登陆失败");
                         }
@@ -107,7 +115,25 @@ public class Login extends JFrame {
     }
 
     public static void main(String[] args) {
-        new Login();
+//        new Login();
+        Message message = new Message(new JSONObject());
+        message.addInfo("name","wan");
+        message.addInfo("id","19030100408");
+        message.addInfo("password","123456");
+        message.addInfo("classId","190315");
+        message.addInfo("loginType",OptFrame.STU);
+        OptFrame opt = new OptFrame(message);
+        while(opt.runnable){
+            Thread thread = new Thread(opt);
+            thread.run();
+            System.out.println("线程完毕");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+        }
+        System.out.println("线程结束");
     }
 
 

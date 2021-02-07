@@ -11,8 +11,6 @@ public class Message implements Serializable {
         messageType = MessageType.nullMessage;
     }
     public Message(JSONObject info){
-        this.messageType= (int) info.get("MessageType");
-        info.remove("MessageType");
         this.info = info;
     }
     public Message(JSONObject info,int messageType){

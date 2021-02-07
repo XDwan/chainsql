@@ -8,10 +8,15 @@ import net.sf.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class OptFrame extends JFrame implements Runnable {
+    public boolean runnable = true;
     JSONObject info = new JSONObject();
-    Student_info stuInfo;
+    int loginType ;
+    final static int STU = 1; // 学生登陆模式
+    final static int TEH = 2; // 教师登陆模式
 
     Container container = this.getContentPane();
     JPanel statusStu = new JPanel();
@@ -24,17 +29,37 @@ public class OptFrame extends JFrame implements Runnable {
     ClientConnection connection = new ClientConnection();
 
     public OptFrame(Message reMessage) {
-        info.put("name",reMessage.getInfo().getString("name"));
-        info.put("id",reMessage.getInfo().getString("id"));
-        info.put("password",reMessage.getInfo().getString("password"));
-        stuInfo = new Student_info(reMessage.getInfo());
+        JSONObject object = reMessage.getInfo();
+        System.out.println(object.getInt("loginType"));
+        loginType = object.getInt("loginType");
+        switch (loginType){
+            case OptFrame.STU:
+                info.put("name",object.getString("name"));
+                info.put("id",object.getString("id"));
+                info.put("password",object.getString("password"));
+                frameShowStu();
+                break;
+            case OptFrame.TEH:
+
+                frameShowTeacher();
+                break;
+        }
+
+
     }
 
     @Override
     public void run() {
-        connection.set();
-        connection.connect();
-        Message message = connection.send(request());
+//        connection.set();
+//        connection.connect();
+//        Message message = connection.send(request());
+        System.out.println("线程开始");
+        Message message = new Message(new JSONObject());
+        message.addInfo("name","wan");
+        message.addInfo("id","19030100408");
+        message.addInfo("password","123456");
+        message.addInfo("classId","190315");
+        message.addInfo("login",OptFrame.STU);
         if (message.getMessageType() == MessageType.Stu_Return){
             stuStateUpdate(message.getInfo());
             System.out.println("学生信息更新完毕");
@@ -63,6 +88,7 @@ public class OptFrame extends JFrame implements Runnable {
 
 
     public void signInButton_Set() {
+        // 登陆按钮设置
         signButton.setBounds(350,50,100,50);
         signButton.setText("签到");
         container.add(signButton);
@@ -102,11 +128,22 @@ public class OptFrame extends JFrame implements Runnable {
 
     public Message request(){
         Message request = new Message();
-        request.setMessageType(MessageType.Stu_Request);
-        request.addInfo("stuInfo",stuInfo);
+        if (loginType == OptFrame.STU){
+            request.setMessageType(MessageType.Stu_Request);
+            request.addInfo("stuInfo", new Student_info(info));
+        }
+
+
         return request;
     }
+
     public static void main(String[] args) {
-        new OptFrame(new Message()).frameShowStu();
+        Message message = new Message(new JSONObject());
+        message.addInfo("name","wan");
+        message.addInfo("id","19030100408");
+        message.addInfo("password","123456");
+        message.addInfo("classId","190315");
+        message.addInfo("login",OptFrame.STU);
+        new OptFrame(message).frameShowStu();
     }
 }
