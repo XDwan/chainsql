@@ -110,7 +110,7 @@ public class ChainSQLDeal {
     public void createAdminGroup(String adminId){
         // 创建管理群组表
         JSONObject object = c.createTable(adminId,
-                c.array("{'field':'id','type':'varchar'}",
+                c.array("{'field':'"+adminId+"','type':'varchar'}",
                         "{'field':'groupName','type':'varchar'}",
                         "{'field':'password','type':'varchar'}",
                         "{'field':'adminGroup','type':'varchar'}")).submit(
@@ -132,5 +132,62 @@ public class ChainSQLDeal {
         c.commit();
     }
 
+    public void delAdmin(String id,String name){
+        // 删除一个用户
+        c.beginTran();
+        JSONObject object = c.table("AdminTable")
+                .get(c.array("{"+
+                        "'name':"+name+
+                        "'id':"+id+
+                        "}"))
+                .delete()
+                .submit(Submit.SyncCond.db_success);
+        if (object.has("error_message")){
+            System.out.println(object);
+            return ;
+        }else {
+            System.out.println("status"+object.getString("status")+" del success");
+        }
+        object = c.dropTable("id")
+                .submit(Submit.SyncCond.db_success);
+        if (object.has("error_message")){
+            System.out.println(object);
+        }else {
+            System.out.println("status"+object.getString("status")+" del success");
+        }
+        c.commit();
+    }
 
+    public void createSignTable(){
+        c.beginTran();
+        JSONObject object = c.table("SignTable").get().submit();
+        if (object.getBoolean("final_result"))
+        {
+            System.out.println(object);
+            return; // 表已建立
+        }
+        object = c.createTable("SignTable",
+                c.array("{'field':'index','type':'varchar'}",
+                        "{'field':'id','type':'varchar'}",
+                        "{'field':'name','type':'varchar'}",
+                        "{'field':'group','type':'varchar'}",
+                        "{'field':'releaseTime','type':'varchar'}",
+                        "{'field':'lastTime','type':'varchar'}",
+                        "{'field':'endTime','type':'varchar'}",
+                        "{'field':'status','type':'int'}",
+                        "{'field':'signTime','type':'varchar'}")).submit(
+                Submit.SyncCond.db_success);
+        System.out.println(object);
+        c.commit();
+    }
+
+
+    public void insertSign(String index,String id,String name,String group,String releaseTime,String lastTime){
+
+    }
+
+
+    public void releaseSign(String group,String lastTime){
+
+    }
 }
