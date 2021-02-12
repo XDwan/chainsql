@@ -19,14 +19,8 @@ public class ServerConnection extends Thread {
             try {
                 System.out.println("建立连接");
                 Socket server = serverSocket.accept();
-                ObjectInputStream in = new ObjectInputStream(server.getInputStream());
-                ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
-                Message message = (Message) in.readObject();
-
-                out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress()
-                        + "\nGoodbye!"
-                );
-            } catch (IOException | ClassNotFoundException e) {
+                ServerDealing dealing = new ServerDealing(server);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
