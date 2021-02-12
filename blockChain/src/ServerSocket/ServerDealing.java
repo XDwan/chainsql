@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ServerDealing {
+public class ServerDealing implements Runnable{
     Message message;
     Socket socket;
     ObjectInputStream in;
@@ -24,7 +24,7 @@ public class ServerDealing {
         }
 
         try {
-            Message message = (Message) in.readObject();
+            message = (Message) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -51,4 +51,13 @@ public class ServerDealing {
     }
 
 
+    @Override
+    public void run() {
+         message =deal(message);
+        try {
+            out.writeObject(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

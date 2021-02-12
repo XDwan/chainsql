@@ -20,6 +20,8 @@ public class ServerConnection extends Thread {
                 System.out.println("建立连接");
                 Socket server = serverSocket.accept();
                 ServerDealing dealing = new ServerDealing(server);
+                Thread t = new Thread(dealing);
+                t.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
