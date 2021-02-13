@@ -4,7 +4,11 @@ package chainsql;
 import com.peersafe.chainsql.core.Chainsql;
 import com.peersafe.chainsql.core.Submit;
 import com.peersafe.chainsql.core.Table;
+import net.sf.json.JSON;
 import org.json.JSONObject;
+
+import java.util.Date;
+import java.util.List;
 
 public class ChainSQLDeal {
     Chainsql c = new Chainsql();
@@ -125,7 +129,7 @@ public class ChainSQLDeal {
                 "'id':" + id + "," +
                 "'name':" + name + "," +
                 "'password':" + "123456" + "," +
-                "'group':" + "personal_" + id + "," +
+                "'group':" + "''," +
                 "}")).submit(Submit.SyncCond.db_success);
         createAdminGroup(id);
         System.out.println(object);
@@ -171,8 +175,8 @@ public class ChainSQLDeal {
                         "{'field':'id','type':'varchar'}",
                         "{'field':'name','type':'varchar'}",
                         "{'field':'group','type':'varchar'}",
+                        "{'field':'admin','type':'varchar'}",
                         "{'field':'releaseTime','type':'varchar'}",
-                        "{'field':'lastTime','type':'varchar'}",
                         "{'field':'endTime','type':'varchar'}",
                         "{'field':'status','type':'int'}",
                         "{'field':'signTime','type':'varchar'}")).submit(
@@ -182,12 +186,57 @@ public class ChainSQLDeal {
     }
 
 
-    public void insertSign(String index,String id,String name,String group,String releaseTime,String lastTime){
-
+    public void insertSign(String index,String id,String name,String group,String releaseTime,String endTime){
+        c.beginTran();
+        Table UserTable = new Table("SignTable");
+        JSONObject object = UserTable.insert(c.array("{" +
+                "'index':'" + index + "'," +
+                "'id':'" + id + "'," +
+                "'name':'" + name + "'," +
+                "'group':" + group + "," +
+                "'releaseTime':'" + releaseTime + "'," +
+                "'endTime':'" +endTime+ "'," +
+                "'status':0,"+
+                "'signTime':''" +
+                "}")).submit(Submit.SyncCond.db_success);
+        createAdminGroup(id);
+        System.out.println(object);
+        c.commit();
     }
 
 
-    public void releaseSign(String group,String lastTime){
+    public void releaseSign(String group,long lastMin){
+        Date date = new Date();
+        String releaseTime = String.valueOf(date.getTime());
+        date = new Date(date.getTime()+lastMin*60*1000);
+        String endTime = String.valueOf(date.getTime());
+        JSONObject object = c.table("UserTable")
+                .get(
+                    c.array("{" +
+                            "'group':'" +
+                            group+
+                            "'}")
+                )
+                .submit(Submit.SyncCond.db_success);
+        if (object.has("error_message")){
+            System.out.println(object);
+            return;
+        }
+        List user = (List) object.get("lines");
+        for (Object i : user){
+            i = (JSONObject) i;
+            String name = ((JSONObject) i).getString("name");
+            String id = ((JSONObject) i).getString("name");
+            String admin = ((JSONObject) i).getString("name");
+            insertSign(admin+releaseTime,id,name,group,releaseTime,endTime);
+        }
 
+    }
+
+    public static void main(String[] args) {
+        Date date = new Date();
+        System.out.println(date);
+        date = new Date(date.getTime()+1*60*1000);
+        System.out.println(date);
     }
 }

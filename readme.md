@@ -144,7 +144,6 @@
 > - 姓名 name
 > - 群组 group
 > - 发布时间 releaseTime
-> - 持续时间 lastTime
 > - 结束时间 endTime
 > - 签到状态 status
 > - 签到时间 signTime
