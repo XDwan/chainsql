@@ -1,8 +1,8 @@
 package chainsql;
 
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Raw {
 
@@ -31,5 +31,10 @@ public class Raw {
         String raw  ;
         raw = "{"+key+":"+value+"}";
         return raw;
+    }
+
+    static JSONArray getLines(JSONObject object){
+        JSONArray array = object.getJSONArray("lines");
+        return array;
     }
 }

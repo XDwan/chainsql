@@ -6,19 +6,28 @@ import com.peersafe.chainsql.core.Submit;
 import com.peersafe.chainsql.core.Table;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.Date;
 import java.util.List;
 
 public class ChainSQLDeal {
     Chainsql c = new Chainsql();
-
+    String UserTable = "UserTable";
+    String AdminTable = "AdminTable";
+    String SignTable = "SignTable";
     public ChainSQLDeal(String address, String secret, String url) {
         c.as(address, secret);
         c.connect(url);
         createUserTable();
     }
 
+    JSONObject get(String tableName,String keys){
+        c.beginTran();
+        JSONObject object = c.table(tableName)
+                .get(c.array(keys))
+                .submit(Submit.SyncCond.db_success);
+        c.commit();
+        return object;
+    }
     // 用户有关
     public void insertUser(String name, String id, String classId) {
         // 插入一个新的用户 初始密码 123456
@@ -228,18 +237,10 @@ public class ChainSQLDeal {
     }
 
     public void updateSignTime(String index) {
+        c.beginTran();
         Date date = new Date();
         String signTime = String.valueOf(date.getTime());
-        JSONObject object = c.table("SignTable").get(
-                c.array(
-                        Raw.array(Raw.key("index",index))
-                )
-        ).order(
-                c.array(
-                        Raw.order("endTime",-1)
-                )
-        ).submit(Submit.SyncCond.db_success);
-        object = c.table("SignTable"
+        JSONObject object = c.table("SignTable"
         ).get(
                 c.array(
                         Raw.array(Raw.key("index",index))
@@ -247,8 +248,30 @@ public class ChainSQLDeal {
         ).update(
                 Raw.array(Raw.key("signTime",signTime),Raw.key("status",1))
         ).submit(Submit.SyncCond.db_success);
+        c.commit();
     }
 
+    public String getUserIndex(String id){
+        // 通过id 查询最近签到
+        c.beginTran();
+        String index = "null";
+        JSONObject object = c.table("SignTable").get(
+                c.array(
+                        Raw.array(Raw.key("index",index))
+                )
+        ).order(
+                c.array(
+                        Raw.order("releaseTime",-1)
+                )
+        ).submit(Submit.SyncCond.db_success);
+        JSONArray array = Raw.getLines(object);
+        object = array.getJSONObject(0);
+        index = object.getString("index");
+        c.commit();
+        return index;
+    }
 
-
+    public JSONObject getUser(String id,String password){
+        JSONObject object = get(UserTable,Raw.array("id",id));
+    }
 }
