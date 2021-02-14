@@ -21,6 +21,7 @@ public class ChainSQLDeal {
     }
 
     JSONObject get(String tableName,String keys){
+        // 获取依关键字获取表中信息
         c.beginTran();
         JSONObject object = c.table(tableName)
                 .get(c.array(keys))
@@ -271,7 +272,19 @@ public class ChainSQLDeal {
         return index;
     }
 
-    public JSONObject getUser(String id,String password){
+    public JSONObject getUser(String id){
         JSONObject object = get(UserTable,Raw.array("id",id));
+        JSONArray array = Raw.getLines(object);
+        object = (JSONObject) array.get(0);
+        return object;
     }
+
+    public JSONObject getAdmin(String id){
+        JSONObject object = get(AdminTable,Raw.array("id",id));
+        JSONArray array = Raw.getLines(object);
+        object = (JSONObject) array.get(0);
+        return object;
+    }
+
+
 }

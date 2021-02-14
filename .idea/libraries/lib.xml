@@ -22,6 +22,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.ideaLibSources/fastjson-1.2.75-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/json-20160810-sources.jar!/" />
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/blockChain/lib" recursive="false" />
   </library>

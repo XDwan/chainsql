@@ -18,6 +18,21 @@ public class SignTable {
     private int status;
     private String signTime;
 
+    public SignTable() {
+    }
+
+    public SignTable(JSONObject object){
+        index = object.getString("index");
+        id = object.getString("id");
+        name = object.getString("name");
+        group = object.getString("group");
+        admin = object.getString("admin");
+        releaseTime =object.getString("releaseTime");
+        endTime=object.getString("endTime");
+        status=object.getInt("status");
+        signTime=object.getString("signTime");
+    }
+
     public String getId() {
         return id;
     }
@@ -53,6 +68,7 @@ public class SignTable {
     public String getSignTime() {
         return signTime;
     }
+
 
     public static void main(String[] args) {
         SignTable table = new SignTable();
