@@ -143,6 +143,7 @@
 > - 签到人 id
 > - 姓名 name
 > - 群组 group
+> - 管理员 admin
 > - 发布时间 releaseTime
 > - 结束时间 endTime
 > - 签到状态 status
