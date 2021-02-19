@@ -29,7 +29,29 @@ public class Message implements Serializable {
         this.messageType = messageType;
     }
 
-    public void addInfo(String key,Object value){
+    public void clear(){
+        info.clear();
+    }
+
+    public void add(String key, Object value){
         info.put(key,value);
+    }
+
+    public void addBasicInfo(JSONObject info){
+        add("name",info.getString("name"));
+        add("id",info.getString("id"));
+    }
+
+
+
+    public void buildLogin(int loginType, String id, String password){
+        setMessageType(loginType);
+        add("id",id);
+        add("password",password);
+    }
+
+    public void buildUserRequest(JSONObject info){
+        setMessageType(MessageType.User_Request);
+        addBasicInfo(info);
     }
 }

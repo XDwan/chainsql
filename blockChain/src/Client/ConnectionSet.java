@@ -1,4 +1,4 @@
-package ClientSocket;
+package Client;
 
 public interface ConnectionSet {
     int port=5526;

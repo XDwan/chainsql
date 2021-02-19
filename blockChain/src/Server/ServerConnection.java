@@ -1,6 +1,4 @@
-package ServerSocket;
-
-import messageCollection.Message;
+package Server;
 
 import java.io.*;
 import java.net.ServerSocket;

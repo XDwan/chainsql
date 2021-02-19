@@ -1,4 +1,4 @@
-package ClienMain;
+package Client;
 
 import SwingFrame.Login;
 

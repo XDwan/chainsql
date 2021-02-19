@@ -1,4 +1,4 @@
-package ClientSocket;
+package Client;
 
 import messageCollection.Message;
 import SwingFrame.Warning;

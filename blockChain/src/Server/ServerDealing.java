@@ -1,4 +1,4 @@
-package ServerSocket;
+package Server;
 
 import messageCollection.Message;
 import messageCollection.MessageType;
@@ -35,14 +35,14 @@ public class ServerDealing implements Runnable{
     public Message deal(Message message) {
         Message returnMessage = new Message();
         switch (message.getMessageType()) {
-            case MessageType.Stu_Login:
+            case MessageType.User_Login:
 
                 break;
-            case MessageType.Teacher_Login:
+            case MessageType.Admin_Login:
 
                 break;
 
-            case MessageType.Stu_Request:
+            case MessageType.User_Request:
 
                 break;
 
