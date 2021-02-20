@@ -25,6 +25,10 @@ public class Message implements Serializable {
         return info;
     }
 
+    public String getDetail(String key){
+        return info.getString(key);
+    }
+
     public void setMessageType(int messageType) {
         this.messageType = messageType;
     }

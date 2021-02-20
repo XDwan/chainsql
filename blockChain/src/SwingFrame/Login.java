@@ -75,7 +75,7 @@ public class Login extends JFrame {
                 connection.set();
                 connection.connect();
                 message = connection.send(message);
-                if (message.getInfo().getBoolean("success")){
+                if (message.getInfo().getBoolean("status")){
                     OptFrame opt = new OptFrame(message,loginType);
                     while (true) {
                         Thread thread = new Thread(opt);
