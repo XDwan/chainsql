@@ -18,6 +18,8 @@ public class ChainSQLDeal {
         c.as(address, secret);
         c.connect(url);
         createUserTable();
+        createAdminTable();
+        createSignTable();
     }
 
     JSONObject get(String tableName,String keys){
@@ -82,7 +84,7 @@ public class ChainSQLDeal {
         c.commit();
     }
 
-    public void renewUser(String name, String id) {
+    public boolean renewUser(String name, String id) {
         c.beginTran();
         JSONObject object = c.table("UserTable")
                 .get(c.array("{" +
@@ -93,10 +95,12 @@ public class ChainSQLDeal {
                 .submit(Submit.SyncCond.db_success);
         if (object.has("error_message")) {
             System.out.println(object);
+            return false;
         } else {
             System.out.println("status" + object.getString("status") + " del success");
         }
         c.commit();
+        return true;
     }
 
     // 管理员有关
@@ -129,7 +133,7 @@ public class ChainSQLDeal {
                 Submit.SyncCond.db_success);
     }
 
-    public void insertAdmin(String id, String name) {
+    public boolean insertAdmin(String id, String name) {
         // 插入一个新的用户 初始密码 123456
         c.beginTran();
         Table UserTable = new Table("UserTable");
@@ -140,11 +144,15 @@ public class ChainSQLDeal {
                 "'group':" + "''," +
                 "}")).submit(Submit.SyncCond.db_success);
         createAdminGroup(id);
+        if (object.has("error_message")){
+            return false;
+        }
         System.out.println(object);
         c.commit();
+        return true;
     }
 
-    public void delAdmin(String id, String name) {
+    public boolean delAdmin(String id, String name) {
         // 删除一个用户
         c.beginTran();
         JSONObject object = c.table("AdminTable")
@@ -156,7 +164,7 @@ public class ChainSQLDeal {
                 .submit(Submit.SyncCond.db_success);
         if (object.has("error_message")) {
             System.out.println(object);
-            return;
+            return false;
         } else {
             System.out.println("status" + object.getString("status") + " del success");
         }
@@ -168,6 +176,7 @@ public class ChainSQLDeal {
             System.out.println("status" + object.getString("status") + " del success");
         }
         c.commit();
+        return true;
     }
 
     public void createSignTable() {
@@ -212,7 +221,7 @@ public class ChainSQLDeal {
     }
 
 
-    public void releaseSign(String group, long lastMin) {
+    public boolean releaseSign(String group, long lastMin) {
         Date date = new Date();
         String releaseTime = String.valueOf(date.getTime());
         date = new Date(date.getTime() + lastMin * 60 * 1000);
@@ -224,7 +233,7 @@ public class ChainSQLDeal {
                 .submit(Submit.SyncCond.db_success);
         if (object.has("error_message")) {
             System.out.println(object);
-            return;
+            return false;
         }
         JSONArray array = object.getJSONArray("lines");
         for (Object i : array) {
@@ -235,6 +244,7 @@ public class ChainSQLDeal {
             insertSign(admin + releaseTime, id, name, group, releaseTime, endTime);
         }
 
+        return true;
     }
 
     public void updateSignTime(String index) {
@@ -258,7 +268,7 @@ public class ChainSQLDeal {
         String index = "null";
         JSONObject object = c.table("SignTable").get(
                 c.array(
-                        Raw.array(Raw.key("index",index))
+                        Raw.array(Raw.key("id",id))
                 )
         ).order(
                 c.array(
@@ -286,6 +296,54 @@ public class ChainSQLDeal {
         return object;
     }
 
+    public JSONObject getSignStatus(String index){
+        c.beginTran();
+        JSONObject object = c.table("SignTable").get(
+                c.array(
+                        Raw.array(Raw.key("index",index))
+                )
+        ).order(
+                c.array(
+                        Raw.order("releaseTime",-1)
+                )
+        ).submit(Submit.SyncCond.db_success);
+        JSONArray array = Raw.getLines(object);
+        object = array.getJSONObject(0);
+        c.commit();
+        return object;
+    }
 
+    public JSONArray getUserHistory(String id){
+        c.beginTran();
+        JSONObject object = c.table("SignTable").get(
+                c.array(
+                        Raw.array(Raw.key("id",id))
+                )
+        ).order(
+                c.array(
+                        Raw.order("releaseTime",-1)
+                )
+        ).submit(Submit.SyncCond.db_success);
+        if (object.has("error_message")){
+            return null;
+        }
+        JSONArray array = Raw.getLines(object);
+        c.commit();
+        return array;
+    }
 
+    public JSONArray getGroupList(String group){
+        c.beginTran();
+        JSONObject object = c.table("UserTable").get(
+                c.array(
+                        Raw.array(Raw.key("group",group))
+                )
+        ).submit(Submit.SyncCond.db_success);
+        if (object.has("error_message")){
+            return null;
+        }
+        JSONArray array = Raw.getLines(object);
+        c.commit();
+        return array;
+    }
 }
