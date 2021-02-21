@@ -11,7 +11,8 @@ public class ClientConnection {
     int port;
     String ip;
     public ClientConnection(){
-
+        set();
+        connect();
     }
 
     public void set(int port,String ip){
@@ -27,9 +28,10 @@ public class ClientConnection {
     public void connect(){
         try {
             client = new Socket(ip,port);
+            client.setSoTimeout(1000);
         } catch (IOException e) {
             e.printStackTrace();
-            new Warning("网络连接错误"+e.getLocalizedMessage(),"网络连接错误");
+            new Warning("网络连接错误","网络连接错误");
         }
     }
 

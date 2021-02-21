@@ -19,7 +19,7 @@ public interface MessageType {
     int Admin_ChangeGroup = 22; //管理员改变群组
     int Admin_NewUser=23;
     int Admin_DelUser=24;
-    int Admin_Group = 25;
+    int Admin_Group = 25; // 请求某一组的全部信息
     int Admin_ReNew=26;
-
+    int Admin_Groups=27; // 请求某管理员的全部组
 }

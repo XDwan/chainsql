@@ -124,7 +124,8 @@ public class ServerDealing implements Runnable{
             case MessageType.Admin_NewUser:
                 returnMessage.add("status",
                         c.insertAdmin(message.getDetail("id")
-                                ,message.getDetail("name")));
+                                ,message.getDetail("name")
+                                ,message.getDetail("group")));
                 break;
             case MessageType.Admin_DelUser:
                 returnMessage.add(

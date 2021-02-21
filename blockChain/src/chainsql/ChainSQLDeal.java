@@ -133,7 +133,7 @@ public class ChainSQLDeal {
                 Submit.SyncCond.db_success);
     }
 
-    public boolean insertAdmin(String id, String name) {
+    public boolean insertAdmin(String id, String name,String group) {
         // 插入一个新的用户 初始密码 123456
         c.beginTran();
         Table UserTable = new Table("UserTable");
@@ -141,7 +141,7 @@ public class ChainSQLDeal {
                 "'id':" + id + "," +
                 "'name':" + name + "," +
                 "'password':" + "123456" + "," +
-                "'group':" + "''," +
+                "'group':'" + group+"'," +
                 "}")).submit(Submit.SyncCond.db_success);
         createAdminGroup(id);
         if (object.has("error_message")){

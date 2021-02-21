@@ -2,7 +2,7 @@ package Client;
 
 import SwingFrame.Login;
 
-public class ClientStart {
+public class ClientMain {
 
     public static void main(String[] args) {
         new Login();

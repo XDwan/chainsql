@@ -47,7 +47,7 @@ public class Login extends JFrame {
         buttonGroup.add(radioButton_student);
         buttonGroup.add(radioButton_teacher);
         radioButton_student.setBounds(150, 200, 75, 50);
-        radioButton_teacher.setBounds(275, 200, 75, 50);
+        radioButton_teacher.setBounds(275, 200, 100, 50);
         radioButton_student.setFont(new Font("", 0, 22));
         radioButton_teacher.setFont(new Font("", 0, 22));
         buttonGroup.setSelected(radioButton_student.getModel(), true);
@@ -70,25 +70,25 @@ public class Login extends JFrame {
                 Message message = new Message();
                 message.buildLogin(loginType, id, password);
                 System.out.println(message.getInfo());
-
-                ClientConnection connection = new ClientConnection();
-                connection.set();
-                connection.connect();
-                message = connection.send(message);
-                if (message.getInfo().getBoolean("status")){
-                    OptFrame opt = new OptFrame(message,loginType);
-                    while (true) {
-                        Thread thread = new Thread(opt);
-                        thread.run();
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException interruptedException) {
-                            interruptedException.printStackTrace();
-                        }
-                    }
-                }else {
-                    new Warning("请检查账号密码", "登陆失败");
-                }
+                new Warning("请检查账号密码", "登陆失败");
+//                ClientConnection connection = new ClientConnection();
+//                connection.set();
+//                connection.connect();
+//                message = connection.send(message);
+//                if (message.getInfo().getBoolean("status")){
+//                    OptFrame opt = new OptFrame(message,loginType);
+//                    while (true) {
+//                        Thread thread = new Thread(opt);
+//                        thread.run();
+//                        try {
+//                            Thread.sleep(1000);
+//                        } catch (InterruptedException interruptedException) {
+//                            interruptedException.printStackTrace();
+//                        }
+//                    }
+//                }else {
+//                    new Warning("请检查账号密码", "登陆失败");
+//                }
             }
         });
         container.add(button_login);
@@ -106,12 +106,13 @@ public class Login extends JFrame {
     public static void main(String[] args) {
 //        new Login();
         Message message = new Message(new JSONObject());
-        message.add("name", "wan");
-        message.add("id", "19030100408");
+        message.add("name", "用户1");
+        message.add("id", "19030100000");
         message.add("password", "123456");
-        message.add("classId", "190315");
+        message.add("group", "卓越计划");
         message.add("loginType", OptFrame.STU);
-        OptFrame opt = new OptFrame(message,MessageType.User_Login);
+        message.add("signInStatus","空闲");
+        OptFrame opt = new OptFrame(message,MessageType.Admin_Login);
         while (opt.runnable) {
             Thread thread = new Thread(opt);
             thread.run();

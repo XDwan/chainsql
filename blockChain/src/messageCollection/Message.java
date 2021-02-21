@@ -5,7 +5,7 @@ import net.sf.json.JSONObject;
 import java.io.Serializable;
 
 public class Message implements Serializable {
-    JSONObject info;
+    JSONObject info = new JSONObject();
     int messageType;
     public  Message(){
         messageType = MessageType.nullMessage;
